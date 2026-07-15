@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Furniture Intake Agent — Progress Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background-color: #FAFAF8;
+            color: #1A1A1A;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        header {
+            margin-bottom: 32px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #6B7280;
+            font-size: 14px;
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .status-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .status-card h3 {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #6B7280;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .status-card .value {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .status-card .value.highlight {
+            color: #2563EB;
+        }
+
+        .status-card .value.warning {
+            color: #D97706;
+        }
+
+        .progress-section {
+            margin-bottom: 40px;
+        }
+
+        .progress-section h2 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        .phase {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .phase-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .phase-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .phase-progress {
+            font-size: 14px;
+            color: #6B7280;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #E5E7EB;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #2563EB;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-fill.complete {
+            background: #059669;
+        }
+
+        .progress-fill.warning {
+            background: #D97706;
+        }
+
+        .tasks {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+
+        .task {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .task-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .task-dot.done {
+            background: #059669;
+        }
+
+        .task-dot.in-progress {
+            background: #2563EB;
+            animation: pulse 2s infinite;
+        }
+
+        .task-dot.pending {
+            background: #E5E7EB;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .recent-changes {
+            margin-bottom: 40px;
+        }
+
+        .recent-changes h2 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        .change-list {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .change-item {
+            padding: 16px 24px;
+            border-bottom: 1px solid #E5E7EB;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .change-item:last-child {
+            border-bottom: none;
+        }
+
+        .change-date {
+            font-size: 12px;
+            color: #6B7280;
+            min-width: 100px;
+        }
+
+        .change-desc {
+            flex: 1;
+            font-size: 14px;
+        }
+
+        .change-files {
+            font-size: 12px;
+            color: #6B7280;
+        }
+
+        .scenario {
+            margin-bottom: 40px;
+        }
+
+        .scenario h2 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        .flow-diagram {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .flow-step {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #F3F4F6;
+            border-radius: 8px;
+            margin: 8px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .flow-arrow {
+            display: inline-block;
+            margin: 0 8px;
+            color: #6B7280;
+        }
+
+        .limitations {
+            margin-bottom: 40px;
+        }
+
+        .limitations h2 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        .limitation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 16px;
+        }
+
+        .limitation-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #D97706;
+        }
+
+        .limitation-card h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .limitation-card p {
+            font-size: 13px;
+            color: #6B7280;
+        }
+
+        footer {
+            margin-top: 48px;
+            padding-top: 24px;
+            border-top: 1px solid #E5E7EB;
+            text-align: center;
+            color: #6B7280;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Furniture Intake Agent</h1>
+            <p class="subtitle">AI-приёмщик заявок для мебельных компаний — Progress Dashboard</p>
+        </header>
+
+        <div class="status-grid">
+            <div class="status-card">
+                <h3>Текущий этап</h3>
+                <div class="value highlight">Prototype</div>
+            </div>
+            <div class="status-card">
+                <h3>Общий прогресс</h3>
+                <div class="value">15%</div>
+            </div>
+            <div class="status-card">
+                <h3>Главный блокер</h3>
+                <div class="value warning">Нет интервью</div>
+            </div>
+            <div class="status-card">
+                <h3>Следующий milestone</h3>
+                <div class="value">Kitchen Flow</div>
+            </div>
+        </div>
+
+        <section class="progress-section">
+            <h2>Этапы проекта</h2>
+
+            <div class="phase">
+                <div class="phase-header">
+                    <span class="phase-title">Этап 0: Создание репозитория и памяти проекта</span>
+                    <span class="phase-progress">100%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill complete" style="width: 100%"></div>
+                </div>
+                <div class="tasks">
+                    <div class="task">
+                        <span class="task-dot done"></span>
+                        <span>Создание репозитория</span>
+                    </div>
+                    <div class="task">
+                        <span class="task-dot done"></span>
+                        <span>Управляющие документы</span>
+                    </div>
+                    <div class="task">
+                        <span class="task-dot done"></span>
+                        <span>Структура каталогов</span>
+                    </div>
+                    <div class="task">
+                        <span class="task-dot done"></span>
+                        <span>Progress dashboard</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="phase">
+                <div class="phase-header">
+                    <span class="phase-title">Этап 1: Исследование и сценарий разговора</span>
+                    <span class="phase-progress">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 0%"></div>
+                </div>
+                <div class="tasks">
+                    <div class="task">
+                        <span class="task-dot pending"></span>
+                        <span>Интервью с компаниями</span>
+                    </div>
+                    <div class="task">
+                        <span class="task-dot pending"></span>
+                        <span>Анализ проблем</span>
+                    </div>
+                    <div class="task">
+                        <span class="task-dot pending"></span>
+                        <span>Сценарий разговора</span>
+                    </div>
+                    <div class="task">
+                        <span class="task-dot pending"></span>
+                        <span>Подготовка ошибок</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="phase">
+                <div class="phase-header">
+                    <span class="phase-title">Этап 2: Визуальный прототип</span>
+                    <span class="phase-progress">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 0%"></div>
+                </div>
+                <div class="tasks">
+                    <div class="task">
+                        <span class="task-dot pending"></span>
+                        <span>Экран заявок</span>
+                    </div>
+                    <div class="task">
+                        <span class="task-dot pending"></span>
+                        <span>Карточка заявки</span>
+                    </div>
+                    <div class="task">
+                        <span class="task-dot pending"></span>
+                        <span>История диалога</span>
+                    </div>
+                    <div class="task">
+                        <span class="task-dot pending"></span>
+                        <span>Кнопки управления</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="phase">
+                <div class="phase-header">
+                    <span class="phase-title">Этап 3: Локальный concierge MVP</span>
+                    <span class="phase-progress">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 0%"></div>
+                </div>
+                <div class="tasks">
+                    <div class="task">
+                        <span class="task-dot pending"></span>
+                        <span>FastAPI-приложение</span>
+                    </div>
+                    <div class="task">
+                        <span class="task-dot pending"></span>
+                        <span>PostgreSQL</span>
+                    </div>
+                    <div class="task">
+                        <span class="task-dot pending"></span>
+                        <span>Модели данных</span>
+                    </div>
+                    <div class="task">
+                        <span class="task-dot pending"></span>
+                        <span>API-эндпоинты</span>
+                    </div>
+                    <div class="task">
+                        <span class="task-dot pending"></span>
+                        <span>Веб-кабинет</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="phase">
+                <div class="phase-header">
+                    <span class="phase-title">Этап 4: AI-логика для кухни</span>
+                    <span class="phase-progress">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 0%"></div>
+                </div>
+                <div class="tasks">
+                    <div class="task">
+                        <span class="task-dot pending"></span>
+                        <span>Распознавание намерения</span>
+                    </div>
+                    <div class="task">
+                        <span class="task-dot pending"></span>
+                        <span>Извлечение фактов</span>
+                    </div>
+                    <div class="task">
+                        <span class="task-dot pending"></span>
+                        <span>Управление вопросами</span>
+                    </div>
+                    <div class="task">
+                        <span class="task-dot pending"></span>
+                        <span>Формирование резюме</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="recent-changes">
+            <h2>Последние изменения</h2>
+            <div class="change-list">
+                <div class="change-item">
+                    <span class="change-date">2026-07-15</span>
+                    <span class="change-desc">Созданы управляющие документы</span>
+                    <span class="change-files">PRODUCT.md, DESIGN.md, AGENTS.md</span>
+                </div>
+                <div class="change-item">
+                    <span class="change-date">2026-07-15</span>
+                    <span class="change-desc">Создана структура каталогов</span>
+                    <span class="change-files">app/, tests/, docs/</span>
+                </div>
+                <div class="change-item">
+                    <span class="change-date">2026-07-15</span>
+                    <span class="change-desc">Создан progress dashboard</span>
+                    <span class="change-files">docs/progress-dashboard.html</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="scenario">
+            <h2>Текущий сценарий</h2>
+            <div class="flow-diagram">
+                <span class="flow-step">Customer message</span>
+                <span class="flow-arrow">→</span>
+                <span class="flow-step">AI intake</span>
+                <span class="flow-arrow">→</span>
+                <span class="flow-step">Structured application</span>
+                <span class="flow-arrow">→</span>
+                <span class="flow-step">Manager notification</span>
+                <span class="flow-arrow">→</span>
+                <span class="flow-step">Human takeover</span>
+            </div>
+        </section>
+
+        <section class="limitations">
+            <h2>Известные ограничения</h2>
+            <div class="limitation-grid">
+                <div class="limitation-card">
+                    <h4>Нет реального WhatsApp</h4>
+                    <p>Используется mock-режим. Реальная интеграция — Этап 6.</p>
+                </div>
+                <div class="limitation-card">
+                    <h4>Нет AI-логики</h4>
+                    <p>AI-обработка диалогов пока не реализована.</p>
+                </div>
+                <div class="limitation-card">
+                    <h4>Нет базы данных</h4>
+                    <p>Данные хранятся в памяти. PostgreSQL — Этап 3.</p>
+                </div>
+                <div class="limitation-card">
+                    <h4>Нет тестов</h4>
+                    <p>Тесты требуются после создания приложения.</p>
+                </div>
+                <div class="limitation-card">
+                    <h4>Нет интервью</h4>
+                    <p>Сценарий разговора не проверен с реальными компаниями.</p>
+                </div>
+                <div class="limitation-card">
+                    <h4>Только кухни</h4>
+                    <p>Первая версия работает только с заявками на кухни.</p>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>Furniture Intake Agent — Last updated: 2026-07-15</p>
+        </footer>
+    </div>
+</body>
+</html>
