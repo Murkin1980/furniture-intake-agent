@@ -8,6 +8,7 @@ Coding-агент отвечает за:
 - Соблюдение архитектурных решений
 - Написание тестов
 - Обновление документации после изменений
+- Закрепление работы в GitHub после каждого этапа
 
 ## Обязательные документы перед работой
 
@@ -105,6 +106,52 @@ shape → craft → polish
 - Не коммитить секреты, ключи, пароли
 - Не коммитить сгенерированные файлы
 
+## Правила GitHub
+
+### Обязательные действия
+
+1. **Создать репозиторий** — если ещё не существует
+2. **Добавить remote** — `git remote add origin <URL>`
+3. **Запушить после каждого этапа** — `git push origin main`
+4. **Не коммитить секреты** — использовать `.env` и `.gitignore`
+
+### Формат коммита
+
+```
+type(scope): description
+
+[опционально: тело коммита]
+
+[опционально: footer]
+```
+
+### Примеры
+
+```bash
+# Этап 0
+git commit -m "feat: initial project setup with management documents"
+
+# Этап 1
+git commit -m "feat: complete Etapa 1 - research and conversation scenario"
+
+# Этап 2
+git commit -m "feat: create visual prototype for manager dashboard"
+
+# Исправление
+git commit -m "fix(api): handle webhook verification error"
+
+# Документация
+git commit -m "docs: update README with setup instructions"
+```
+
+### Порядок действий после этапа
+
+1. Закоммитить все изменения
+2. Проверить `git status`
+3. Проверить `git log --oneline -5`
+4. Запушить: `git push origin main`
+5. Убедиться, что коммиты видны в GitHub
+
 ## Ритуал завершения сессии
 
 После изменений агент обязан:
@@ -119,6 +166,8 @@ shape → craft → polish
 8. Добавить скриншот интерфейса в `docs/screens/`, если изменялся UI
 9. Записать архитектурное решение в `DECISIONS.md`, если оно было принято
 10. Указать один следующий рекомендуемый шаг
+11. Закоммитить все изменения
+12. Запушить в GitHub
 
 ## Правило одной сессии
 
