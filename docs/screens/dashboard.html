@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Furniture Intake Agent — Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #FAFAF8;
+            color: #1A1A1A;
+            line-height: 1.5;
+        }
+
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: #1A1A1A;
+            color: white;
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 8px;
+            margin-bottom: 32px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: #2563EB;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .logo-text {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .nav-section {
+            margin-bottom: 24px;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #6B7280;
+            padding: 0 8px;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.15s;
+            font-size: 14px;
+            color: #D1D5DB;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .nav-item.active {
+            background: #2563EB;
+            color: white;
+        }
+
+        .nav-item .badge {
+            margin-left: auto;
+            background: #DC2626;
+            color: white;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
+        .nav-icon {
+            width: 20px;
+            height: 20px;
+            opacity: 0.7;
+        }
+
+        .nav-item.active .nav-icon {
+            opacity: 1;
+        }
+
+        /* Main Content */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: white;
+            border-bottom: 1px solid #E5E7EB;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .content {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #6B7280;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .stat-change {
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .stat-change.positive {
+            color: #059669;
+        }
+
+        .stat-change.negative {
+            color: #DC2626;
+        }
+
+        /* Claims Section */
+        .claims-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .claims-panel {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid #E5E7EB;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .panel-title {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .panel-count {
+            font-size: 13px;
+            color: #6B7280;
+        }
+
+        .claims-list {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .claim-item {
+            padding: 16px 20px;
+            border-bottom: 1px solid #F3F4F6;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .claim-item:hover {
+            background: #F9FAFB;
+        }
+
+        .claim-item.active {
+            background: #EFF6FF;
+            border-left: 3px solid #2563EB;
+        }
+
+        .claim-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .claim-status {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .claim-status.new {
+            background: #9CA3AF;
+        }
+
+        .claim-status.ai-collecting {
+            background: #2563EB;
+            animation: pulse 2s infinite;
+        }
+
+        .claim-status.waiting {
+            background: #D97706;
+        }
+
+        .claim-status.ready {
+            background: #059669;
+        }
+
+        .claim-status.in-review {
+            background: #8B5CF6;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .claim-name {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .claim-time {
+            margin-left: auto;
+            font-size: 12px;
+            color: #9CA3AF;
+        }
+
+        .claim-details {
+            font-size: 13px;
+            color: #6B7280;
+            padding-left: 20px;
+        }
+
+        .claim-type {
+            display: inline-block;
+            background: #F3F4F6;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        /* Right Panel - Claim Detail */
+        .claim-detail {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .detail-content {
+            padding: 20px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .detail-section {
+            margin-bottom: 24px;
+        }
+
+        .detail-section-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #6B7280;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .detail-field {
+            padding: 12px;
+            background: #F9FAFB;
+            border-radius: 8px;
+        }
+
+        .detail-field-label {
+            font-size: 12px;
+            color: #6B7280;
+            margin-bottom: 4px;
+        }
+
+        .detail-field-value {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .detail-field-value.missing {
+            color: #D97706;
+            font-style: italic;
+        }
+
+        .photos-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .photo-thumb {
+            aspect-ratio: 1;
+            background: #E5E7EB;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9CA3AF;
+            font-size: 24px;
+        }
+
+        .missing-data {
+            background: #FFFBEB;
+            border: 1px solid #FCD34D;
+            border-radius: 8px;
+            padding: 12px 16px;
+        }
+
+        .missing-data-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #92400E;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .missing-data-list {
+            list-style: none;
+        }
+
+        .missing-data-list li {
+            font-size: 13px;
+            color: #78350F;
+            padding: 4px 0;
+        }
+
+        .missing-data-list li::before {
+            content: "—";
+            margin-right: 8px;
+        }
+
+        /* Action Buttons */
+        .detail-actions {
+            padding: 16px 20px;
+            border-top: 1px solid #E5E7EB;
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.15s;
+        }
+
+        .btn-primary {
+            background: #2563EB;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1D4ED8;
+        }
+
+        .btn-secondary {
+            background: #F3F4F6;
+            color: #374151;
+        }
+
+        .btn-secondary:hover {
+            background: #E5E7EB;
+        }
+
+        .btn-danger {
+            background: #DC2626;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #B91C1C;
+        }
+
+        .btn-success {
+            background: #059669;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #047857;
+        }
+
+        /* Chat Preview */
+        .chat-preview {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            margin-top: 24px;
+        }
+
+        .chat-messages {
+            padding: 16px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .chat-message {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .chat-message.ai {
+            flex-direction: row;
+        }
+
+        .chat-message.client {
+            flex-direction: row-reverse;
+        }
+
+        .chat-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .chat-message.ai .chat-avatar {
+            background: #2563EB;
+            color: white;
+        }
+
+        .chat-message.client .chat-avatar {
+            background: #8B7355;
+            color: white;
+        }
+
+        .chat-bubble {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .chat-message.ai .chat-bubble {
+            background: #F3F4F6;
+        }
+
+        .chat-message.client .chat-bubble {
+            background: #2563EB;
+            color: white;
+        }
+
+        .chat-time {
+            font-size: 11px;
+            color: #9CA3AF;
+            margin-top: 4px;
+        }
+
+        .chat-message.client .chat-time {
+            text-align: right;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .claims-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .photos-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">🪑</div>
+                <span class="logo-text">Furniture AI</span>
+            </div>
+
+            <nav>
+                <div class="nav-section">
+                    <div class="nav-label">Основное</div>
+                    <div class="nav-item active">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                            <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+                            <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+                            <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+                        </svg>
+                        Заявки
+                        <span class="badge">3</span>
+                    </div>
+                    <div class="nav-item">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                        Диалоги
+                    </div>
+                    <div class="nav-item">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                        Клиенты
+                    </div>
+                </div>
+
+                <div class="nav-section">
+                    <div class="nav-label">Настройки</div>
+                    <div class="nav-item">
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                        </svg>
+                        Настройки
+                    </div>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main">
+            <header class="header">
+                <h1 class="header-title">Заявки</h1>
+                <div class="header-actions">
+                    <button class="btn btn-secondary">Экспорт</button>
+                    <button class="btn btn-primary">+ Новая заявка</button>
+                </div>
+            </header>
+
+            <div class="content">
+                <!-- Stats -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">Новые сегодня</div>
+                        <div class="stat-value">3</div>
+                        <div class="stat-change positive">+2 к вчера</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">В обработке AI</div>
+                        <div class="stat-value">1</div>
+                        <div class="stat-change">Собирает данные</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Готовы к замеру</div>
+                        <div class="stat-value">2</div>
+                        <div class="stat-change positive">Ждут менеджера</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-label">Конверсия</div>
+                        <div class="stat-value">68%</div>
+                        <div class="stat-change positive">+5% к прошлой неделе</div>
+                    </div>
+                </div>
+
+                <!-- Claims -->
+                <div class="claims-section">
+                    <!-- Left: Claims List -->
+                    <div class="claims-panel">
+                        <div class="panel-header">
+                            <span class="panel-title">Активные заявки</span>
+                            <span class="panel-count">3 заявки</span>
+                        </div>
+                        <div class="claims-list">
+                            <div class="claim-item active">
+                                <div class="claim-header">
+                                    <span class="claim-status ready"></span>
+                                    <span class="claim-name">Айгуль</span>
+                                    <span class="claim-time">2 мин назад</span>
+                                </div>
+                                <div class="claim-details">
+                                    угловая кухня — Алматы
+                                    <div class="claim-type">Готова к работе</div>
+                                </div>
+                            </div>
+                            <div class="claim-item">
+                                <div class="claim-header">
+                                    <span class="claim-status ai-collecting"></span>
+                                    <span class="claim-name">Ерлан</span>
+                                    <span class="claim-time">15 мин назад</span>
+                                </div>
+                                <div class="claim-details">
+                                    кухня — Астана
+                                    <div class="claim-type">AI собирает данные</div>
+                                </div>
+                            </div>
+                            <div class="claim-item">
+                                <div class="claim-header">
+                                    <span class="claim-status waiting"></span>
+                                    <span class="claim-name">Нуржан</span>
+                                    <span class="claim-time">1 час назад</span>
+                                </div>
+                                <div class="claim-details">
+                                    прямая кухня — Караганда
+                                    <div class="claim-type">Ожидает клиента</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Claim Detail -->
+                    <div class="claims-panel claim-detail">
+                        <div class="panel-header">
+                            <span class="panel-title">Заявка №124</span>
+                            <span class="panel-count">От: WhatsApp</span>
+                        </div>
+                        <div class="detail-content">
+                            <div class="detail-section">
+                                <div class="detail-section-title">Основная информация</div>
+                                <div class="detail-grid">
+                                    <div class="detail-field">
+                                        <div class="detail-field-label">Клиент</div>
+                                        <div class="detail-field-value">Айгуль</div>
+                                    </div>
+                                    <div class="detail-field">
+                                        <div class="detail-field-label">Телефон</div>
+                                        <div class="detail-field-value">+7 (777) 123-45-67</div>
+                                    </div>
+                                    <div class="detail-field">
+                                        <div class="detail-field-label">Город</div>
+                                        <div class="detail-field-value">Алматы</div>
+                                    </div>
+                                    <div class="detail-field">
+                                        <div class="detail-field-label">Изделие</div>
+                                        <div class="detail-field-value">Угловая кухня</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="detail-section">
+                                <div class="detail-section-title">Параметры заказа</div>
+                                <div class="detail-grid">
+                                    <div class="detail-field">
+                                        <div class="detail-field-label">Размеры</div>
+                                        <div class="detail-field-value">3200 × 2100 мм</div>
+                                    </div>
+                                    <div class="detail-field">
+                                        <div class="detail-field-label">Стиль</div>
+                                        <div class="detail-field-value">Современный минимализм</div>
+                                    </div>
+                                    <div class="detail-field">
+                                        <div class="detail-field-label">Фасады</div>
+                                        <div class="detail-field-value">Светлый крашеный МДФ</div>
+                                    </div>
+                                    <div class="detail-field">
+                                        <div class="detail-field-label">Техника</div>
+                                        <div class="detail-field-value">Встроенная</div>
+                                    </div>
+                                    <div class="detail-field">
+                                        <div class="detail-field-label">Бюджет</div>
+                                        <div class="detail-field-value">до 3 000 000 тг</div>
+                                    </div>
+                                    <div class="detail-field">
+                                        <div class="detail-field-label">Срок</div>
+                                        <div class="detail-field-value">2 месяца</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="detail-section">
+                                <div class="detail-section-title">Фото (4)</div>
+                                <div class="photos-grid">
+                                    <div class="photo-thumb">📷</div>
+                                    <div class="photo-thumb">📷</div>
+                                    <div class="photo-thumb">📷</div>
+                                    <div class="photo-thumb">📷</div>
+                                </div>
+                            </div>
+
+                            <div class="detail-section">
+                                <div class="missing-data">
+                                    <div class="missing-data-title">
+                                        ⚠ Не хватает данных
+                                    </div>
+                                    <ul class="missing-data-list">
+                                        <li>Высота потолка</li>
+                                        <li>Расположение коммуникаций</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="detail-actions">
+                            <button class="btn btn-success">Взять в работу</button>
+                            <button class="btn btn-primary">Запросить данные</button>
+                            <button class="btn btn-secondary">Назначить замер</button>
+                            <button class="btn btn-danger">Нецелевая</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Preview -->
+                <div class="chat-preview">
+                    <div class="panel-header">
+                        <span class="panel-title">Диалог с клиентом</span>
+                        <span class="panel-count">AI_MODE</span>
+                    </div>
+                    <div class="chat-messages">
+                        <div class="chat-message ai">
+                            <div class="chat-avatar">AI</div>
+                            <div>
+                                <div class="chat-bubble">
+                                    Здравствуйте! Я помогу рассчитать стоимость вашей кухни. Расскажите, что вам нужно.
+                                </div>
+                                <div class="chat-time">14:30</div>
+                            </div>
+                        </div>
+                        <div class="chat-message client">
+                            <div class="chat-avatar">А</div>
+                            <div>
+                                <div class="chat-bubble">
+                                    Хочу угловую кухню, примерно 3 метра
+                                </div>
+                                <div class="chat-time">14:31</div>
+                            </div>
+                        </div>
+                        <div class="chat-message ai">
+                            <div class="chat-avatar">AI</div>
+                            <div>
+                                <div class="chat-bubble">
+                                    Отлично! Укажите точные размеры: длина и ширина стен в миллиметрах.
+                                </div>
+                                <div class="chat-time">14:31</div>
+                            </div>
+                        </div>
+                        <div class="chat-message client">
+                            <div class="chat-avatar">А</div>
+                            <div>
+                                <div class="chat-bubble">
+                                    3200 на 2100
+                                </div>
+                                <div class="chat-time">14:32</div>
+                            </div>
+                        </div>
+                        <div class="chat-message ai">
+                            <div class="chat-avatar">AI</div>
+                            <div>
+                                <div class="chat-bubble">
+                                    Сохранил! Пришлите фото помещения, где будет стоять кухня.
+                                </div>
+                                <div class="chat-time">14:32</div>
+                            </div>
+                        </div>
+                        <div class="chat-message client">
+                            <div class="chat-avatar">А</div>
+                            <div>
+                                <div class="chat-bubble">
+                                    [4 фото]
+                                </div>
+                                <div class="chat-time">14:33</div>
+                            </div>
+                        </div>
+                        <div class="chat-message ai">
+                            <div class="chat-avatar">AI</div>
+                            <div>
+                                <div class="chat-bubble">
+                                    Спасибо! Какой стиль предпочитаете: минимализм, классика, лофт?
+                                </div>
+                                <div class="chat-time">14:33</div>
+                            </div>
+                        </div>
+                        <div class="chat-message client">
+                            <div class="chat-avatar">А</div>
+                            <div>
+                                <div class="chat-bubble">
+                                    Минимализм, светлые тона
+                                </div>
+                                <div class="chat-time">14:34</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

@@ -4,9 +4,9 @@
 
 ```
 Current phase: Prototype
-Overall progress: 25%
-Main blocker: No visual prototype yet
-Next milestone: Create visual prototype for manager dashboard
+Overall progress: 35%
+Main blocker: Backend framework not yet created
+Next milestone: Create backend framework (Etapa 3)
 ```
 
 ## Этапы проекта
@@ -30,10 +30,10 @@ Next milestone: Create visual prototype for manager dashboard
 
 ### Этап 2: Визуальный прототип
 ```
-[░░░░░░░░░░] Экран заявок               0%
-[░░░░░░░░░░] Карточка заявки            0%
-[░░░░░░░░░░] История диалога            0%
-[░░░░░░░░░░] Кнопки управления          0%
+[██████████] Экран заявок               100%
+[██████████] Карточка заявки            100%
+[██████████] История диалога            100%
+[██████████] Кнопки управления          100%
 ```
 
 ### Этап 3: Локальный concierge MVP
@@ -85,6 +85,10 @@ Next milestone: Create visual prototype for manager dashboard
 | 2026-07-15 | Создан сценарий передачи | docs/flows/handoff-flow.md |
 | 2026-07-15 | Создана обработка ошибок | docs/flows/error-handling.md |
 | 2026-07-15 | Созданы управляющие документы | PRODUCT.md, DESIGN.md, AGENTS.md |
+| 2026-07-15 | Создан визуальный прототип | docs/screens/dashboard.html |
+| 2026-07-15 | Создана карточка заявки | docs/screens/claim-card.html |
+| 2026-07-15 | Создана история диалога | docs/screens/dialogue-history.html |
+| 2026-07-15 | Созданы кнопки управления | docs/screens/buttons.html |
 
 ## Текущий сценарий
 
@@ -106,18 +110,19 @@ Customer message
 
 ## Ближайший milestone
 
-**Этап 2: Создание визуального прототипа**
+**Этап 3: Локальный concierge MVP**
 
 Критерии завершения:
-- Экран новых заявок
-- Карточка заявки
-- История диалога
-- Кнопки управления
+- FastAPI-приложение
+- PostgreSQL база данных
+- Модели данных
+- API-эндпоинты
+- Веб-кабинет
 
 ## Рекомендации
 
 Приоритет:
-1. Визуальный прототип
-2. Backend-каркас
-3. AI-логика
-4. Интеграция с WhatsApp
+1. Backend-каркас
+2. AI-логика
+3. Интеграция с WhatsApp
+4. Telegram-бот
