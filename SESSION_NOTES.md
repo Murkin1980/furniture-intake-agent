@@ -230,3 +230,52 @@
 
 **Следующий рекомендуемый шаг:**
 Этап 4: AI-логика для кухни
+
+---
+
+### Дата: 2026-07-15 (Etapa 4)
+
+**Цель сессии:**
+Завершение Этапа 4: AI-логика для кухни
+
+**Что сделано:**
+- Создан AI-сервис (app/services/ai.py)
+- Создан модуль распознавания намерений (app/services/intent.py)
+- Создан модуль извлечения фактов (app/services/extract.py)
+- Создан менеджер вопросов (app/services/questions.py)
+- Создан генератор резюме (app/services/summary.py)
+- Создан основной сервис сбора данных (app/services/intake.py)
+- Обновлён webhook для использования AI (app/api/webhook.py)
+- Добавлена зависимость openai в requirements.txt
+
+**Изменённые файлы:**
+- app/services/ai.py
+- app/services/intent.py
+- app/services/extract.py
+- app/services/questions.py
+- app/services/summary.py
+- app/services/intake.py
+- app/api/webhook.py
+- requirements.txt
+
+**Принятые решения:**
+- Использовать OpenAI API для AI-обработки
+- Реализовать пошаговый сбор данных (13 вопросов)
+- Генерировать резюме заявки для менеджера
+
+**Проверено:**
+- Структура AI-модулей создана
+- Промпты для OpenAI написаны
+
+**Не сделано:**
+- Тестирование AI-логики
+- Интеграция с WhatsApp
+- Авторизация
+- Telegram-бот
+
+**Известные проблемы:**
+- Нет .env файла с ключами OpenAI
+- Нет тестов
+
+**Следующий рекомендуемый шаг:**
+Этап 5: Telegram-бот для менеджеров

@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Request, HTTPException
 from app.core.supabase import get_supabase
-import hashlib
-import hmac
+from app.services.intake import KitchenIntake
 
 router = APIRouter()
 
@@ -71,6 +70,17 @@ async def handle_new_lead(phone: str, text: str, message_id: str):
     }
     supabase.table("messages").insert(message_data).execute()
 
+    intake = KitchenIntake(lead["id"], conversation["id"])
+    response = intake.process_message(text)
+
+    response_data = {
+        "conversation_id": conversation["id"],
+        "sender_type": "ai",
+        "content": response,
+        "message_type": "text"
+    }
+    supabase.table("messages").insert(response_data).execute()
+
 
 async def handle_existing_lead(lead: dict, text: str, message_id: str):
     supabase = get_supabase()
@@ -96,3 +106,14 @@ async def handle_existing_lead(lead: dict, text: str, message_id: str):
         "external_id": message_id
     }
     supabase.table("messages").insert(message_data).execute()
+
+    intake = KitchenIntake(lead["id"], conversation["id"])
+    response = intake.process_message(text)
+
+    response_data = {
+        "conversation_id": conversation["id"],
+        "sender_type": "ai",
+        "content": response,
+        "message_type": "text"
+    }
+    supabase.table("messages").insert(response_data).execute()
