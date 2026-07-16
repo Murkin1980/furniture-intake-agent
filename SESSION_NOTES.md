@@ -176,3 +176,57 @@
 
 **Следующий рекомендуемый шаг:**
 Этап 3: Создание backend-каркаса
+
+---
+
+### Дата: 2026-07-15 (Etapa 3)
+
+**Цель сессии:**
+Завершение Этапа 3: Создание backend-каркаса с Supabase
+
+**Что сделано:**
+- Создано FastAPI-приложение (app/main.py)
+- Настроен Supabase-клиент (app/core/supabase.py)
+- Созданы Pydantic-модели (app/models/schemas.py)
+- Созданы API-эндпоинты для Leads (app/api/leads.py)
+- Созданы API-эндпоинты для Conversations (app/api/conversations.py)
+- Создан Webhook для WhatsApp (app/api/webhook.py)
+- Создан простой веб-кабинет (app/static/index.html)
+- Создан requirements.txt
+
+**Изменённые файлы:**
+- app/main.py
+- app/core/config.py
+- app/core/supabase.py
+- app/models/schemas.py
+- app/api/leads.py
+- app/api/conversations.py
+- app/api/webhook.py
+- app/static/index.html
+- requirements.txt
+- app/__init__.py
+- app/core/__init__.py
+- app/models/__init__.py
+- app/api/__init__.py
+
+**Принятые решения:**
+- Использовать Supabase вместо сырой PostgreSQL
+- Использовать pydantic-settings для конфигурации
+- Создать простой веб-кабинет для просмотра заявок
+
+**Проверено:**
+- Структура файлов создана
+- Модели данных соответствуют DATA_MODEL.md
+
+**Не сделано:**
+- Тестирование API-эндпоинтов
+- Интеграция с WhatsApp
+- AI-логика
+- Авторизация
+
+**Известные проблемы:**
+- Нет .env файла с ключами Supabase
+- Нет тестов
+
+**Следующий рекомендуемый шаг:**
+Этап 4: AI-логика для кухни

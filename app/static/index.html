@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Furniture Intake Agent</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #FAFAF8;
+            color: #1A1A1A;
+            line-height: 1.5;
+        }
+
+        .header {
+            background: white;
+            border-bottom: 1px solid #E5E7EB;
+            padding: 16px 24px;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .nav {
+            display: flex;
+            gap: 24px;
+        }
+
+        .nav a {
+            color: #6B7280;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .nav a:hover {
+            color: #2563EB;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #6B7280;
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .leads-table {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        .table-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid #E5E7EB;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px 20px;
+            text-align: left;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        th {
+            font-size: 12px;
+            color: #6B7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+
+        tr:hover {
+            background: #F9FAFB;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .badge-new {
+            background: #F3F4F6;
+            color: #374151;
+        }
+
+        .badge-ai {
+            background: #DBEAFE;
+            color: #1E40AF;
+        }
+
+        .badge-ready {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+
+        .badge-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+
+        .badge-new .badge-dot { background: #9CA3AF; }
+        .badge-ai .badge-dot { background: #2563EB; }
+        .badge-ready .badge-dot { background: #059669; }
+
+        .empty-state {
+            padding: 48px;
+            text-align: center;
+            color: #6B7280;
+        }
+
+        @media (max-width: 768px) {
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">Furniture Intake Agent</div>
+            <div class="nav">
+                <a href="/">Заявки</a>
+                <a href="/settings">Настройки</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1 class="page-title">Заявки</h1>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-label">Всего</div>
+                <div class="stat-value" id="stat-total">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Новые</div>
+                <div class="stat-value" id="stat-new">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">AI собирает</div>
+                <div class="stat-value" id="stat-ai">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Готовы</div>
+                <div class="stat-value" id="stat-ready">0</div>
+            </div>
+        </div>
+
+        <div class="leads-table">
+            <div class="table-header">
+                <div class="table-title">Последние заявки</div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Имя</th>
+                        <th>Телефон</th>
+                        <th>Город</th>
+                        <th>Статус</th>
+                        <th>Дата</th>
+                    </tr>
+                </thead>
+                <tbody id="leads-list">
+                </tbody>
+            </table>
+            <div class="empty-state" id="empty-state">
+                Нет заявок
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function loadLeads() {
+            try {
+                const response = await fetch('/api/leads/?company_id=default');
+                const leads = await response.json();
+
+                document.getElementById('stat-total').textContent = leads.length;
+                document.getElementById('stat-new').textContent = leads.filter(l => l.status === 'new').length;
+                document.getElementById('stat-ai').textContent = leads.filter(l => l.status === 'ai_collecting').length;
+                document.getElementById('stat-ready').textContent = leads.filter(l => l.status === 'ready_for_manager').length;
+
+                const tbody = document.getElementById('leads-list');
+                const emptyState = document.getElementById('empty-state');
+
+                if (leads.length === 0) {
+                    emptyState.style.display = 'block';
+                    tbody.innerHTML = '';
+                } else {
+                    emptyState.style.display = 'none';
+                    tbody.innerHTML = leads.map(lead => `
+                        <tr>
+                            <td>${lead.name || '—'}</td>
+                            <td>${lead.phone || '—'}</td>
+                            <td>${lead.city || '—'}</td>
+                            <td>
+                                <span class="badge badge-${getStatusClass(lead.status)}">
+                                    <span class="badge-dot"></span>
+                                    ${getStatusText(lead.status)}
+                                </span>
+                            </td>
+                            <td>${new Date(lead.created_at).toLocaleDateString('ru-RU')}</td>
+                        </tr>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Error loading leads:', error);
+            }
+        }
+
+        function getStatusClass(status) {
+            const classes = {
+                'new': 'new',
+                'ai_collecting': 'ai',
+                'waiting_for_client': 'ai',
+                'ready_for_manager': 'ready'
+            };
+            return classes[status] || 'new';
+        }
+
+        function getStatusText(status) {
+            const texts = {
+                'new': 'Новая',
+                'ai_collecting': 'AI собирает',
+                'waiting_for_client': 'Ожидает клиента',
+                'ready_for_manager': 'Готова',
+                'manager_review': 'У менеджера',
+                'measurement_scheduled': 'Замер назначен',
+                'won': 'Выиграна',
+                'lost': 'Потеряна'
+            };
+            return texts[status] || status;
+        }
+
+        loadLeads();
+    </script>
+</body>
+</html>

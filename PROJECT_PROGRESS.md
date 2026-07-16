@@ -3,10 +3,10 @@
 ## Общий статус
 
 ```
-Current phase: Prototype
-Overall progress: 35%
-Main blocker: Backend framework not yet created
-Next milestone: Create backend framework (Etapa 3)
+Current phase: Backend
+Overall progress: 45%
+Main blocker: AI logic not yet implemented
+Next milestone: Implement AI logic for kitchen (Etapa 4)
 ```
 
 ## Этапы проекта
@@ -38,11 +38,11 @@ Next milestone: Create backend framework (Etapa 3)
 
 ### Этап 3: Локальный concierge MVP
 ```
-[░░░░░░░░░░] FastAPI-приложение          0%
-[░░░░░░░░░░] PostgreSQL                  0%
-[░░░░░░░░░░] Модели данных              0%
-[░░░░░░░░░░] API-эндпоинты              0%
-[░░░░░░░░░░] Веб-кабинет                0%
+[██████████] FastAPI-приложение          100%
+[██████████] Supabase                    100%
+[██████████] Модели данных              100%
+[██████████] API-эндпоинты              100%
+[██████████] Веб-кабинет                100%
 ```
 
 ### Этап 4: AI-логика для кухни
@@ -89,6 +89,8 @@ Next milestone: Create backend framework (Etapa 3)
 | 2026-07-15 | Создана карточка заявки | docs/screens/claim-card.html |
 | 2026-07-15 | Создана история диалога | docs/screens/dialogue-history.html |
 | 2026-07-15 | Созданы кнопки управления | docs/screens/buttons.html |
+| 2026-07-15 | Создан backend-каркас | app/main.py, app/api/*, app/core/*, app/models/* |
+| 2026-07-15 | Создан веб-кабинет | app/static/index.html |
 
 ## Текущий сценарий
 
@@ -104,25 +106,24 @@ Customer message
 
 1. **Нет реального WhatsApp** — используется mock-режим
 2. **Нет AI-логики** — пока не реализована
-3. **Нет базы данных** — данные хранятся в памяти
+3. **Нет .env файла** — нужны ключи Supabase
 4. **Нет тестов** — требуются после создания приложения
 5. **Нет интервью** — сценарий разговора не проверен
 
 ## Ближайший milestone
 
-**Этап 3: Локальный concierge MVP**
+**Этап 4: AI-логика для кухни**
 
 Критерии завершения:
-- FastAPI-приложение
-- PostgreSQL база данных
-- Модели данных
-- API-эндпоинты
-- Веб-кабинет
+- Распознавание намерений
+- Извлечение фактов
+- Управление вопросами
+- Формирование резюме заявки
 
 ## Рекомендации
 
 Приоритет:
-1. Backend-каркас
-2. AI-логика
-3. Интеграция с WhatsApp
-4. Telegram-бот
+1. AI-логика
+2. Интеграция с WhatsApp
+3. Telegram-бот
+4. Тесты

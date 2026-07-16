@@ -2,7 +2,7 @@
 
 ## Текущий этап
 
-**Этап 2: Визуальный прототип**
+**Этап 3: Backend-каркас**
 
 Статус: ✅ Завершён
 
@@ -22,19 +22,25 @@
   - История диалога (dialogue-history.html)
   - Кнопки управления (buttons.html)
 - Выбран Supabase для хранения данных
+- Backend-каркас создан:
+  - FastAPI-приложение (app/main.py)
+  - Supabase-клиент (app/core/supabase.py)
+  - Pydantic-модели (app/models/schemas.py)
+  - API-эндпоинты для Leads (app/api/leads.py)
+  - API-эндпоинты для Conversations (app/api/conversations.py)
+  - Webhook для WhatsApp (app/api/webhook.py)
+  - Простой веб-кабинет (app/static/index.html)
 
 ## Что является mock
 
-- Прототипы статичные, нет интерактивности
-- Нет приложения
-- Нет подключения к Supabase
-- Нет API-эндпоинтов
+- Нет .env файла с ключами Supabase
+- Нет тестов
 - Нет AI-логики
 - Нет интеграций
 
 ## Что ещё не подключено
 
-- Supabase (зарегистрирован, но не подключён)
+- Supabase (нужен .env файл)
 - WhatsApp Business Platform
 - OpenAI API
 - Telegram Bot
@@ -52,9 +58,6 @@
 
 ## Как запустить проект
 
-На данном этапе приложение отсутствует.
-
-После создания backend-каркаса:
 ```bash
 # Клонировать репозиторий
 git clone https://github.com/username/furniture-intake-agent.git
@@ -71,21 +74,22 @@ cp .env.example .env
 uvicorn app.main:app --reload
 ```
 
+Открыть http://localhost:8000 в браузере.
+
 ## Текущий этап
 
-**Этап 2 → Этап 3**
+**Этап 3 → Этап 4**
 
-Переход к созданию backend-каркаса.
+Переход к AI-логике для кухни.
 
 ## Главный блокер
 
-Отсутствие backend-каркаса.
+Отсутствие AI-логики.
 
-Нельзя создавать AI-логику без:
-- FastAPI-приложения
-- Базы данных
-- API-эндпоинтов
-- Моделей данных
+Нельзя обрабатывать сообщения клиентов без:
+- Распознавания намерений
+- Извлечения фактов
+- Формирования резюме заявки
 
 ## Дата последнего обновления
 
