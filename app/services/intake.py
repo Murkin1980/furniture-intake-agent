@@ -2,7 +2,9 @@ from app.services.intent import recognize_intent
 from app.services.extract import extract_facts
 from app.services.questions import get_next_question, is_complete
 from app.services.summary import generate_summary
+from app.services.telegram import send_lead_notification
 from app.core.supabase import get_supabase
+from app.core.config import settings
 
 
 class KitchenIntake:
@@ -88,4 +90,15 @@ class KitchenIntake:
             "status": "ready_for_manager",
         }).eq("id", self.lead_id).execute()
 
+        self._notify_manager(summary)
+
         return f"Спасибо! Вот ваше заявка:\n\n{summary}\n\nМенеджер свяжется с вами в ближайшее время для уточнения деталей и назначения замера."
+
+    def _notify_manager(self, summary: str):
+        lead = self.supabase.table("leads").select("*").eq("id", self.lead_id).execute().data[0]
+
+        company = self.supabase.table("companies").select("*").eq("id", lead["company_id"]).execute().data
+
+        if company and company[0].get("telegram_chat_id"):
+            chat_id = int(company[0]["telegram_chat_id"])
+            send_lead_notification(chat_id, lead, summary, self.lead_id)

@@ -3,10 +3,10 @@
 ## Общий статус
 
 ```
-Current phase: AI Logic
-Overall progress: 55%
-Main blocker: Telegram bot not yet implemented
-Next milestone: Implement Telegram bot (Etapa 5)
+Current phase: Telegram Bot
+Overall progress: 65%
+Main blocker: WhatsApp integration not yet implemented
+Next milestone: Implement WhatsApp sandbox (Etapa 6)
 ```
 
 ## Этапы проекта
@@ -55,9 +55,9 @@ Next milestone: Implement Telegram bot (Etapa 5)
 
 ### Этап 5: Telegram-передача менеджеру
 ```
-[░░░░░░░░░░] Уведомления                0%
-[░░░░░░░░░░] Кнопки управления          0%
-[░░░░░░░░░░] Ссылка на карточку         0%
+[██████████] Уведомления                100%
+[██████████] Кнопки управления          100%
+[██████████] Ссылка на карточку         100%
 ```
 
 ### Этап 6: WhatsApp sandbox
@@ -92,6 +92,7 @@ Next milestone: Implement Telegram bot (Etapa 5)
 | 2026-07-15 | Создан backend-каркас | app/main.py, app/api/*, app/core/*, app/models/* |
 | 2026-07-15 | Создан веб-кабинет | app/static/index.html |
 | 2026-07-15 | Создана AI-логика для кухни | app/services/* |
+| 2026-07-15 | Создан Telegram-бот | app/services/telegram.py, app/api/telegram.py |
 
 ## Текущий сценарий
 
@@ -106,24 +107,24 @@ Customer message
 ## Известные ограничения
 
 1. **Нет реального WhatsApp** — используется mock-режим
-2. **Нет .env файла** — нужны ключи Supabase и OpenAI
+2. **Нет .env файла** — нужны ключи Supabase, OpenAI, Telegram
 3. **Нет тестов** — требуются после создания приложения
 4. **Нет интервью** — сценарий разговора не проверен
 
 ## Ближайший milestone
 
-**Этап 5: Telegram-бот для менеджеров**
+**Этап 6: WhatsApp sandbox**
 
 Критерии завершения:
-- Telegram-бот
-- Уведомления о заявках
-- Кнопки управления
-- Ссылка на карточку
+- Тестовый номер WhatsApp
+- Webhook для приёма сообщений
+- Приём сообщений от клиентов
+- Отправка ответов клиенту
 
 ## Рекомендации
 
 Приоритет:
-1. Telegram-бот
-2. Интеграция с WhatsApp
-3. Тесты
-4. Деплой
+1. WhatsApp интеграция
+2. Тесты
+3. Деплой
+4. Первый пилот

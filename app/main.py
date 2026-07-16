@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
-from app.api import leads, conversations, webhook
+from app.api import leads, conversations, webhook, telegram
 from app.core.config import settings
 
 app = FastAPI(
@@ -13,6 +13,7 @@ app = FastAPI(
 app.include_router(leads.router, prefix="/api/leads", tags=["leads"])
 app.include_router(conversations.router, prefix="/api/conversations", tags=["conversations"])
 app.include_router(webhook.router, prefix="/webhook", tags=["webhook"])
+app.include_router(telegram.router, prefix="/telegram", tags=["telegram"])
 
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
