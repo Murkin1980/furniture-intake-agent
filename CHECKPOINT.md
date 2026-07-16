@@ -21,33 +21,34 @@
   - Карточка заявки (claim-card.html)
   - История диалога (dialogue-history.html)
   - Кнопки управления (buttons.html)
+- Выбран Supabase для хранения данных
 
 ## Что является mock
 
 - Прототипы статичные, нет интерактивности
 - Нет приложения
-- Нет базы данных
+- Нет подключения к Supabase
 - Нет API-эндпоинтов
 - Нет AI-логики
 - Нет интеграций
 
 ## Что ещё не подключено
 
+- Supabase (зарегистрирован, но не подключён)
 - WhatsApp Business Platform
 - OpenAI API
 - Telegram Bot
-- PostgreSQL
 - Docker Compose
 
 ## Внешние сервисы
 
 | Сервис | Статус | Назначение |
 |--------|--------|------------|
+| Supabase | Не подключён | Хранение данных, файлов, авторизация |
 | WhatsApp Business Platform | Не подключён | Приём сообщений от клиентов |
 | OpenAI API | Не подключён | AI-обработка диалогов |
 | Telegram Bot | Не подключён | Уведомления менеджеров |
-| PostgreSQL | Не подключён | Хранение данных |
-| Docker Compose | Не подключён | Деплой |
+| Docker Compose | Не подключён | Деплой
 
 ## Как запустить проект
 
@@ -61,6 +62,10 @@ cd furniture-intake-agent
 
 # Установить зависимости
 pip install -r requirements.txt
+
+# Настроить переменные окружения
+cp .env.example .env
+# Заполнить SUPABASE_URL и SUPABASE_KEY
 
 # Запустить приложение
 uvicorn app.main:app --reload

@@ -10,6 +10,30 @@ Company → User → Channel → Lead → Conversation → Message → Attachmen
                                   Task → Activity
 ```
 
+## Среда хранения: Supabase
+
+**Supabase** — managed PostgreSQL сервис с доп. функциями.
+
+**Преимущества для проекта:**
+- Хранилище файлов (фото кухонь) — Supabase Storage
+- Авторизация — Supabase Auth
+- Real-time подписки — обновления статусов
+- Dashboard для администрирования
+- PostgreSQL совместимость
+
+**Клиент:** `supabase-py`
+
+**Структура проекта:**
+```
+app/
+├── core/
+│   └── supabase.py      # Инициализация клиента
+├── models/
+│   └── database.py      # Модели данных (Pydantic)
+└── services/
+    └── storage.py       # Работа с Supabase Storage
+```
+
 ## Сущности
 
 ### Company
