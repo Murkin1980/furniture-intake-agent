@@ -1,8 +1,22 @@
-from fastapi import APIRouter, Request, HTTPException
+from fastapi import APIRouter, Request, HTTPException, Query
 from app.core.supabase import get_supabase
 from app.services.intake import KitchenIntake
+from app.services.whatsapp import send_whatsapp_message, parse_webhook_entry
 
 router = APIRouter()
+
+
+@router.get("/whatsapp")
+async def whatsapp_verify(
+    hub_mode: str = Query(alias="hub.mode"),
+    hub_token: str = Query(alias="hub.verify_token"),
+    hub_challenge: str = Query(alias="hub.challenge"),
+):
+    if hub_mode == "subscribe" and hub_token:
+        from app.core.config import settings
+        if hub_token == settings.WHATSAPP_VERIFY_TOKEN:
+            return int(hub_challenge)
+    raise HTTPException(status_code=403, detail="Forbidden")
 
 
 @router.post("/whatsapp")
@@ -13,12 +27,10 @@ async def whatsapp_webhook(request: Request):
         raise HTTPException(status_code=400, detail="Invalid payload")
 
     for entry in body.get("entry", []):
-        for change in entry.get("changes", []):
-            value = change.get("value", {})
-            messages = value.get("messages", [])
-
-            for message in messages:
-                await process_whatsapp_message(message)
+        messages = parse_webhook_entry(entry)
+        for msg in messages:
+            if msg.get("text"):
+                await process_whatsapp_message(msg)
 
     return {"status": "ok"}
 
@@ -27,7 +39,7 @@ async def process_whatsapp_message(message: dict):
     supabase = get_supabase()
 
     phone = message.get("from")
-    text = message.get("text", {}).get("body")
+    text = message.get("text")
     message_id = message.get("id")
 
     if not phone or not text:
@@ -37,12 +49,15 @@ async def process_whatsapp_message(message: dict):
 
     if leads_result.data:
         lead = leads_result.data[0]
-        await handle_existing_lead(lead, text, message_id)
+        response = await handle_existing_lead(lead, text, message_id)
     else:
-        await handle_new_lead(phone, text, message_id)
+        response = await handle_new_lead(phone, text, message_id)
+
+    if response:
+        await send_whatsapp_message(phone, response)
 
 
-async def handle_new_lead(phone: str, text: str, message_id: str):
+async def handle_new_lead(phone: str, text: str, message_id: str) -> str | None:
     supabase = get_supabase()
 
     lead_data = {
@@ -81,8 +96,10 @@ async def handle_new_lead(phone: str, text: str, message_id: str):
     }
     supabase.table("messages").insert(response_data).execute()
 
+    return response
 
-async def handle_existing_lead(lead: dict, text: str, message_id: str):
+
+async def handle_existing_lead(lead: dict, text: str, message_id: str) -> str | None:
     supabase = get_supabase()
 
     conv_result = supabase.table("conversations").select("*").eq("lead_id", lead["id"]).eq("status", "active").execute()
@@ -117,3 +134,5 @@ async def handle_existing_lead(lead: dict, text: str, message_id: str):
         "message_type": "text"
     }
     supabase.table("messages").insert(response_data).execute()
+
+    return response

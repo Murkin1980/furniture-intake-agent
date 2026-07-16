@@ -2,7 +2,7 @@
 
 ## Текущий этап
 
-**Этап 5: Telegram-бот для менеджеров**
+**Этап 6: WhatsApp sandbox**
 
 Статус: ✅ Завершён
 
@@ -41,10 +41,15 @@
   - Telegram-сервис (app/services/telegram.py)
   - Вебхук для кнопок (app/api/telegram.py)
   - Интеграция с intake-сервисом
+- WhatsApp-интеграция создана:
+  - WhatsApp-сервис (app/services/whatsapp.py)
+  - Webhook для приёма/отправки сообщений
+  - Верификация webhook'а (GET-эндпоинт)
+  - Интеграция с intake-сервисом
 
 ## Что является mock
 
-- Нет .env файла с ключами Supabase, OpenAI, Telegram
+- Нет .env файла с ключами Supabase, OpenAI, Telegram, WhatsApp
 - Нет тестов
 - Нет реальных интеграций с внешними сервисами
 
@@ -53,7 +58,7 @@
 - Supabase (нужен .env файл)
 - OpenAI API (нужен .env файл)
 - Telegram Bot (нужен .env файл)
-- WhatsApp Business Platform
+- WhatsApp Business Platform (нужен .env файл)
 - Docker Compose
 
 ## Внешние сервисы
@@ -64,7 +69,7 @@
 | WhatsApp Business Platform | Не подключён | Приём сообщений от клиентов |
 | OpenAI API | Не подключён | AI-обработка диалогов |
 | Telegram Bot | Не подключён | Уведомления менеджеров |
-| Docker Compose | Не подключён | Деплой
+| Docker Compose | Не подключён | Деплой |
 
 ## Как запустить проект
 
@@ -88,18 +93,18 @@ uvicorn app.main:app --reload
 
 ## Текущий этап
 
-**Этап 5 → Этап 6**
+**Этап 6 → Этап 7**
 
-Переход к WhatsApp sandbox.
+Переход к первому пилоту.
 
 ## Главный блокер
 
-Отсутствие WhatsApp-интеграции.
+Отсутствие реального WhatsApp-номера для тестирования.
 
-Нельзя принимать реальные заявки без:
-- WhatsApp Business Platform
-- Webhook для приёма сообщений
-- Отправки ответов клиенту
+Нельзя протестировать полный цикл без:
+- WhatsApp Business Platform аккаунта
+- Тестового номера
+- Webhook URL
 
 ## Дата последнего обновления
 

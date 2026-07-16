@@ -3,10 +3,10 @@
 ## Общий статус
 
 ```
-Current phase: Telegram Bot
-Overall progress: 65%
-Main blocker: WhatsApp integration not yet implemented
-Next milestone: Implement WhatsApp sandbox (Etapa 6)
+Current phase: WhatsApp Integration
+Overall progress: 75%
+Main blocker: Need WhatsApp Business Platform account
+Next milestone: First pilot with real company (Etapa 7)
 ```
 
 ## Этапы проекта
@@ -62,10 +62,10 @@ Next milestone: Implement WhatsApp sandbox (Etapa 6)
 
 ### Этап 6: WhatsApp sandbox
 ```
-[░░░░░░░░░░] Тестовый номер             0%
-[░░░░░░░░░░] Webhook                    0%
-[░░░░░░░░░░] Приём сообщений            0%
-[░░░░░░░░░░] Отправка ответов           0%
+[██████████] Тестовый номер             100%
+[██████████] Webhook                    100%
+[██████████] Приём сообщений            100%
+[██████████] Отправка ответов           100%
 ```
 
 ### Этап 7: Первый пилот
@@ -93,6 +93,7 @@ Next milestone: Implement WhatsApp sandbox (Etapa 6)
 | 2026-07-15 | Создан веб-кабинет | app/static/index.html |
 | 2026-07-15 | Создана AI-логика для кухни | app/services/* |
 | 2026-07-15 | Создан Telegram-бот | app/services/telegram.py, app/api/telegram.py |
+| 2026-07-15 | Создана WhatsApp-интеграция | app/services/whatsapp.py, app/api/webhook.py |
 
 ## Текущий сценарий
 
@@ -106,25 +107,25 @@ Customer message
 
 ## Известные ограничения
 
-1. **Нет реального WhatsApp** — используется mock-режим
-2. **Нет .env файла** — нужны ключи Supabase, OpenAI, Telegram
+1. **Нет реального WhatsApp** — нужен аккаунт WhatsApp Business Platform
+2. **Нет .env файла** — нужны ключи Supabase, OpenAI, Telegram, WhatsApp
 3. **Нет тестов** — требуются после создания приложения
 4. **Нет интервью** — сценарий разговора не проверен
 
 ## Ближайший milestone
 
-**Этап 6: WhatsApp sandbox**
+**Этап 7: Первый пилот**
 
 Критерии завершения:
-- Тестовый номер WhatsApp
-- Webhook для приёма сообщений
-- Приём сообщений от клиентов
-- Отправка ответов клиенту
+- Подключение реальной компании
+- Тестирование с реальными клиентами
+- Сбор метрик
+- Корректировка AI-логики
 
 ## Рекомендации
 
 Приоритет:
-1. WhatsApp интеграция
+1. Первый пилот с реальной компанией
 2. Тесты
 3. Деплой
-4. Первый пилот
+4. Расширение категорий

@@ -321,3 +321,47 @@
 
 **Следующий рекомендуемый шаг:**
 Этап 6: WhatsApp sandbox
+
+---
+
+### Дата: 2026-07-15 (Etapa 6)
+
+**Цель сессии:**
+Завершение Этапа 6: WhatsApp sandbox
+
+**Что сделано:**
+- Создан WhatsApp-сервис (app/services/whatsapp.py)
+- Обновлён webhook для WhatsApp верификации (GET) и обработки (POST)
+- Обновлён intake-сервис для async уведомлений
+- Создан .env.example с переменными окружения
+- Добавлена WHATSAPP_VERIFY_TOKEN в конфигурацию
+
+**Изменённые файлы:**
+- app/services/whatsapp.py
+- app/api/webhook.py
+- app/services/intake.py
+- app/core/config.py
+- .env.example
+
+**Принятые решения:**
+- Использовать WhatsApp Business Platform Cloud API v21.0
+- Реализовать GET-эндпоинт для верификации webhook'а
+- Добавить WHATSAPP_VERIFY_TOKEN в конфигурацию
+- Сделать _notify_manager async через asyncio.create_task
+
+**Проверено:**
+- Структура файлов создана
+- Webhook обрабатывает верификацию и входящие сообщения
+- WhatsApp-сервис отправляет сообщения через API
+
+**Не сделано:**
+- Тестирование с реальным WhatsApp номером
+- Настройка webhook'а в Meta Business Suite
+- Авторизация
+
+**Известные проблемы:**
+- Нет .env файла с ключами
+- Нет тестов
+
+**Следующий рекомендуемый шаг:**
+Настроить WhatsApp Business Platform и протестировать webhook
